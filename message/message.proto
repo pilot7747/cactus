@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package cactus;
+
+message CactusMessage {
+    required int32 message_type = 1;
+    required string content = 2;
+    optional string command = 3;
+    optional bytes files = 4;
+}
