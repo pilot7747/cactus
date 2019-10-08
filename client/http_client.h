@@ -36,7 +36,6 @@ public:
         std::cout << "Sending..\n";
         boost::asio::write(Socket, Request);
         std::cout << "Reading..\n";
-        //boost::asio::read_some(Socket, Responce);
         boost::asio::streambuf::mutable_buffers_type mutableBuffer =
                 Responce.prepare(max_length);
         size_t responceSize = Socket.receive(mutableBuffer);
@@ -48,78 +47,7 @@ public:
         std::cout << responseMessage.Content << std::endl;
     }
 
-
-
-    void HandleResolve(const boost::system::error_code& err, const tcp::resolver::results_type& endpoints) {
-        std::cout << "Resolving" << std::endl;
-        if (!err) {
-            // Attempt a connection to each endpoint in the list until we
-            // successfully establish a connection.
-            boost::asio::async_connect(Socket, endpoints,
-                                       boost::bind(&HttpClient::HandleConnect, this,
-                                                   boost::asio::placeholders::error));
-        } else {
-            std::cout << "Error: " << err.message() << "\n";
-        }
-    }
-
-    void HandleConnect(const boost::system::error_code& err) {
-        std::cout << "Connecting" << std::endl;
-        if (!err)
-        {
-            // The connection was successful. Send the request.
-            boost::asio::async_write(Socket, Request,
-                                     boost::bind(&HttpClient::HandleWriteRequest, this,
-                                                 boost::asio::placeholders::error));
-        }
-        else
-        {
-            std::cout << "Error: " << err.message() << "\n";
-        }
-    }
-
-    void HandleWriteRequest(const boost::system::error_code& err)
-    {
-        std::cout << "Sending..." << std::endl;
-        if (!err)
-        {
-            // Read the response status line. The response_ streambuf will
-            // automatically grow to accommodate the entire line. The growth may be
-            // limited by passing a maximum size to the streambuf constructor.
-            std::cout << "Async read" << std::endl;
-            boost::asio::async_read(Socket, Responce,
-                                          boost::bind(&HttpClient::HandleRead, this,
-                                                      boost::asio::placeholders::error));
-        }
-        else
-        {
-            std::cout << "Error: " << err.message() << "\n";
-        }
-    }
-
-    void HandleRead(const boost::system::error_code& err)
-    {
-        std::cout << "Reading..." << std::endl;
-        if (!err)
-        {
-            std::cout << "Got responce" << std::endl;
-            // Check that response is OK.
-                std::istream responseStream(&Responce);
-                TMessage message;
-                message.Parse(&responseStream);
-                std::cout << message.Content << std::endl;
-        }
-        else
-        {
-            std::cout << "Error: " << err << "\n";
-        }
-    }
-
-
-
 private:
-
-
     boost::asio::io_context IOContext;
     std::string Ip;
     short Port;

@@ -37,7 +37,7 @@ public:
             FilesAttached = true;
             Files = memcpy(Files, request.files().c_str(), request.files().size());
         }
-        std::cout << "---Got message---" << std::endl << "Type: " << static_cast<int>(Message) << std::endl << "Content: " << Content << std::endl << "-----\n";
+        std::cerr << "---Got message---" << std::endl << "Type: " << static_cast<int>(Message) << std::endl << "Content: " << Content << std::endl << "-----\n";
     }
 
     void Parse(std::istream* stream) {
@@ -58,23 +58,18 @@ public:
     }
 
     boost::asio::const_buffer ToBuffer() const {
-        std::cout << "Getting buffer" << std::endl;
         cactus::CactusMessage message;
         message.set_message_type(static_cast<int>(Message));
         message.set_command(Command);
         message.set_content(Content);
-        //message.set_files(static_cast<char*>(Files));
-        std::cout << "Serialized" << std::endl;
         return boost::asio::buffer(message.SerializeAsString());
     }
 
     std::vector<boost::asio::const_buffer> ToBuffers() const  {
-        std::cout << "Getting buffers" << std::endl;
         std::vector<boost::asio::const_buffer> result;
         result.push_back(ToBuffer());
         TMessage request;
         request.Parse(static_cast<const char*>(result[0].data()), result[0].size());
-        std::cout << "In buffers: " << request.Content << std::endl;
         return result;
     }
 
@@ -85,7 +80,6 @@ public:
         message.set_content(Content);
         std::ostream os(streambuf);
         message.SerializeToOstream(&os);
-        std::cout << "Serialized to stream buf " << Content << std::endl;
     }
 
     MessageType Message;

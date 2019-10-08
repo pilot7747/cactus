@@ -7,4 +7,13 @@ message CactusMessage {
     required string content = 2;
     optional string command = 3;
     optional bytes files = 4;
+    optional WorkerConfig worker_config = 5;
+}
+
+message WorkerConfig {
+    optional int32 performance = 1;
+    optional int32 memory = 2;
+    optional int32 cpu_cores = 3;
+    optional string platform = 4;
+    required int32 current_job_num = 5;
 }

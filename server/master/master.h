@@ -17,11 +17,13 @@ public:
         Workers.push_back(std::forward<WorkerU>(workerConfig));
     }
 
-    TMessage HandleMessange(const TMessage& message) {
+    TMessage HandleMessange(const TMessage& message, std::string_view clientIt = "") {
         TMessage answer;
         if (message.Message == MessageType::STATUS) {
             answer.Message = MessageType::STATUS;
             answer.Content = "Ok";
+        } else if (message.Message == MessageType::ADD_WORKER) {
+
         }
         return answer;
     }

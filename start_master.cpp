@@ -1,10 +1,7 @@
 #include <iostream>
 #include "server/server.hpp"
-//#include "server2/server.h"
 
 int main(int argc, char* argv[]) {
-    //HttpServer Server(1489);
-    //Server.Run();
     std::string address =  "0::0";
     std::string port = "1488";
     std::string docRoot = "/Users/pavlichenko/Downloads";
