@@ -16,6 +16,10 @@ __Installation:__ just make.
 
 `cactus-master <ip> <port>`
 
+Run workers by following command:
+
+`cactus-worker <master-ip> <port>`
+
 
 `cactus` is CLI API. Usage:
 
